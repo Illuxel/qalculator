@@ -21,7 +21,7 @@ ToolButton {
     }
 
     background: Rectangle {
-        color:  styledButton.hovered ? "#2e2e37" : baseColor
+        color: styledButton.hovered ? "#2e2e37" : baseColor
         radius: 5
     }
 }

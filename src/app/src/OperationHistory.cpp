@@ -1,10 +1,12 @@
-#include "OperationHistory.h"
+#include "OperationHistory.hpp"
 
 #include <QList>
 #include <QQmlApplicationEngine>
 
-History::History(QObject *parent)
-    : QObject(parent) {}
+History::History(QObject* parent)
+    : QObject(parent)
+{
+}
 
 History* History::GetObject()
 {
@@ -45,7 +47,7 @@ QString History::GetCurrentItem()
         m_CurrentItem->placeHolderText();
     return "";
 }
-void History::SetCurrentItem(const QString& setEl)
+void History::SetCurrentItem(QString const& setEl)
 {
     for (auto el : m_Elements)
         if (el->placeHolderText() == setEl)

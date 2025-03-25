@@ -3,22 +3,21 @@ import QtQuick.Shapes
 import QtQuick.Controls
 import QtQuick.Layouts
 
-
 Rectangle {
     id: textInputStyle
 
-    signal textEdited()
-    signal accepted()
-    signal editingFinished()
+    signal textEdited
+    signal accepted
+    signal editingFinished
 
     function length() {
         return textInput.length;
     }
     function remove(start, end) {
-        textInput.remove(start, end)
+        textInput.remove(start, end);
     }
     function clear() {
-        textInput.clear()
+        textInput.clear();
     }
 
     property bool allowInput: false
@@ -39,9 +38,7 @@ Rectangle {
     clip: true
 
     radius: 5
-    color: textInputStyle.hovered ? 
-        ((hoverColor === "")
-            ? Qt.lighter(baseColor, 1.18) : hoverColor) : backColor
+    color: textInputStyle.hovered ? ((hoverColor === "") ? Qt.lighter(baseColor, 1.18) : hoverColor) : backColor
     border.color: textInputStyle.hovered ? borderColor : backColor
 
     TextInput {
@@ -61,21 +58,21 @@ Rectangle {
         font.bold: textBold
         font.pixelSize: textSize
 
-        validator: RegularExpressionValidator { 
+        validator: RegularExpressionValidator {
             regularExpression: /^[0-9]*$/
         }
 
-        onAccepted:  {
+        onAccepted: {
             textInputStyle.inputText = textInput.text;
-            textInputStyle.accepted()
+            textInputStyle.accepted();
         }
         onTextEdited: {
             textInputStyle.inputText = textInput.text;
-            textInputStyle.textEdited()
+            textInputStyle.textEdited();
         }
-        onEditingFinished:{
+        onEditingFinished: {
             textInputStyle.inputText = textInput.text;
-            textInputStyle.editingFinished()
+            textInputStyle.editingFinished();
         }
     }
 }

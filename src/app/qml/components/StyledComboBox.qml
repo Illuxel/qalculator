@@ -1,4 +1,4 @@
-﻿import QtQuick 
+﻿import QtQuick
 import QtQuick.Controls
 
 import "../components" as Calculator
@@ -21,7 +21,9 @@ ComboBox {
         contextType: "2d"
         Connections {
             target: comboBox
-            function onPressedChanged() { canvas.requestPaint(); }
+            function onPressedChanged() {
+                canvas.requestPaint();
+            }
         }
         onPaint: {
             context.reset();

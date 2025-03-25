@@ -1,13 +1,13 @@
-import QtQuick 2.15
-import QtQuick.Shapes 1.12
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.3
-import QtQuick.Window 2.3
+import QtQuick
+import QtQuick.Shapes
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
 
 import "components" as Calculator
 
-import Calculator.History 1.0
-import Calculator.Converter 1.0
+import Calculator.History
+import Calculator.Converter
 
 ApplicationWindow {
     id: window
@@ -57,7 +57,7 @@ ApplicationWindow {
                 id: moveHandler
                 grabPermissions: TapHandler.TakeOverForbidden
                 onActiveChanged: {
-                    if (active){
+                    if (active) {
                         window.startSystemMove();
                     }
                 }
@@ -68,7 +68,7 @@ ApplicationWindow {
                 spacing: 0
                 Image {
                     id: appIco
-                    source: "qrc:/app/assets/images/calculator.png"
+                    source: "qrc:/assets/calculator.png"
                     sourceSize.width: 20
                     sourceSize.height: 20
                     Layout.leftMargin: 5
@@ -81,16 +81,18 @@ ApplicationWindow {
                     Layout.leftMargin: 5
                 }
 
-                Item { Layout.fillWidth: true }
+                Item {
+                    Layout.fillWidth: true
+                }
 
                 Calculator.StyledWindowButtons {
-                    iconSource: "qrc:/app/assets/images/subtract.ico"
+                    iconSource: "qrc:/assets/subtract.ico"
                     hoverColor: hovered ? Qt.lighter("#1f1f27", 1.1) : "#1f1f27"
                     Layout.minimumWidth: 42
-                    onClicked: window.showMinimized();
+                    onClicked: window.showMinimized()
                 }
                 Calculator.StyledWindowButtons {
-                    iconSource: "qrc:/app/assets/images/close.ico"
+                    iconSource: "qrc:/assets/close.ico"
                     hoverColor: hovered ? "red" : "#1f1f27"
                     Layout.minimumWidth: 42
                     onClicked: window.close()
@@ -120,12 +122,12 @@ ApplicationWindow {
                     Layout.leftMargin: 6
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 
-                    iconSource: "qrc:/app/assets/images/menu.ico"
+                    iconSource: "qrc:/assets/menu.ico"
                     onClicked: {
                         if (drawerMainList.opened)
-                            drawerMainList.close()
+                            drawerMainList.close();
                         else
-                            drawerMainList.open()
+                            drawerMainList.open();
                     }
                 }
                 // Status of opened tab
@@ -142,7 +144,9 @@ ApplicationWindow {
                     font.pixelSize: 20
                 }
 
-                Item { Layout.fillWidth: true }
+                Item {
+                    Layout.fillWidth: true
+                }
 
                 // History
                 Calculator.StyledDrawerButton {
@@ -151,7 +155,7 @@ ApplicationWindow {
                     Layout.rightMargin: 6
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 
-                    iconSource: "qrc:/app/assets/images/history.png"
+                    iconSource: "qrc:/assets/history.png"
                     onClicked: {
                         historyListView.model = History.list;
                         drawerHistory.open();
@@ -168,7 +172,7 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.margins: bw
             clip: true
-            initialItem: "qrc:/app/qml/pages/Standart.qml"
+            initialItem: "qrc:/qml/pages/Standart.qml"
         }
 
         Drawer {
@@ -229,9 +233,24 @@ ApplicationWindow {
                     spacing: 4
 
                     model: ListModel {
-                        ListElement { name: "Standart"; icosource: "qrc:/app/assets/images/calculator.png"; page: "qrc:/app/qml/pages/Standart.qml";  section: "Calculator" }
-                        ListElement { name: "Angle";    icosource: "qrc:/app/assets/images/angle.png";    page: "qrc:/app/qml/pages/Converter.qml"; section: "Converter" }
-                        ListElement { name: "Data";     icosource: "qrc:/app/assets/images/data.png";     page: "qrc:/app/qml/pages/Converter.qml"; section: "Converter" }
+                        ListElement {
+                            name: "Standart"
+                            icosource: "qrc:/assets/calculator.png"
+                            page: "qrc:/qml/pages/Standart.qml"
+                            section: "Calculator"
+                        }
+                        ListElement {
+                            name: "Angle"
+                            icosource: "qrc:/assets/angle.png"
+                            page: "qrc:/qml/pages/Converter.qml"
+                            section: "Converter"
+                        }
+                        ListElement {
+                            name: "Data"
+                            icosource: "qrc:/assets/data.png"
+                            page: "qrc:/qml/Converter.qml"
+                            section: "Converter"
+                        }
                     }
                     delegate: Calculator.StyledToolButton {
                         iconSource: icosource
@@ -245,7 +264,7 @@ ApplicationWindow {
                         textLeftMargin: 5
                         imageLeftMargin: 5
 
-                        textAlign: Qt.AlignLeft
+                        textItemAlign: Qt.AlignLeft
 
                         onClicked: {
                             drawerMainList.close();
@@ -253,7 +272,7 @@ ApplicationWindow {
 
                             if (section == "Calculator")
                                 historyButton.visible = true;
-                            else  
+                            else
                                 historyButton.visible = false;
 
                             if (section == "Converter")
@@ -261,7 +280,7 @@ ApplicationWindow {
 
                             stackView.pop();
                             stackView.push(page);
-                            calcType.text = name
+                            calcType.text = name;
                         }
                     }
 
@@ -273,14 +292,14 @@ ApplicationWindow {
                 Calculator.StyledToolButton {
                     id: settingsButton
 
-                    iconSource: "qrc:/app/assets/images/settings.png"
+                    iconSource: "qrc:/assets/settings.png"
 
                     textButton: "Settings"
                     textBold: false
 
                     contentSpacing: 5
                     imageLeftMargin: 5
-                    textAlign: Qt.AlignLeft
+                    textItemAlign: Qt.AlignLeft
 
                     Layout.fillWidth: true
                     Layout.margins: 10
@@ -289,7 +308,7 @@ ApplicationWindow {
 
                     onClicked: {
                         drawerMainList.close();
-                        settingsDialog.open()
+                        settingsDialog.open();
                     }
                 }
             }
@@ -322,19 +341,18 @@ ApplicationWindow {
                     textButton: modelData
 
                     textLeftMargin: 5
-                    textAlign: Qt.AlignLeft
+                    textItemAlign: Qt.AlignLeft
 
                     onClicked: {
                         History.currentItem = modelData;
-                        drawerHistory.close()
+                        drawerHistory.close();
                     }
                 }
             }
         }
     }
 
-     Calculator.StyledDialog {
+    Calculator.StyledDialog {
         id: settingsDialog
-        title: "test"
-     }
+    }
 }

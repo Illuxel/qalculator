@@ -1,0 +1,269 @@
+{
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 14,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${workspaceFolder}/build/${presetName}",
+            "installDir": "${workspaceFolder}/install/${presetName}",
+            "toolchainFile": "$env{QT_ROOT}/lib/cmake/Qt6/qt.toolchain.cmake",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "x86",
+            "hidden": true,
+            "architecture": {
+                "value": "x86",
+                "strategy": "external"
+            }
+        },
+        {
+            "name": "x64",
+            "hidden": true,
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            }
+        },
+        {
+            "name": "win-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "intelliSenseMode": "windows-clang-x64",
+                    "hostOS": [
+                        "Windows"
+                    ]
+                }
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "linux-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "Linux"
+                    ]
+                },
+                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+                    "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+                }
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "macos-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [
+                        "macOS"
+                    ]
+                },
+                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+                    "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+                }
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "debug",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "base-x64-debug",
+            "inherits": [
+                "base",
+                "x64",
+                "debug"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "base-x64-release",
+            "inherits": [
+                "base",
+                "x64",
+                "release"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "base-x86-debug",
+            "inherits": [
+                "base",
+                "x86",
+                "debug"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "base-x86-release",
+            "inherits": [
+                "base",
+                "x86",
+                "release"
+            ],
+            "hidden": true
+        },
+        {
+            "name": "win-x86-debug",
+            "inherits": [
+                "base-x86-release",
+                "win-base"
+            ],
+            "displayName": "Windows x86 Debug"
+        },
+        {
+            "name": "win-x86-release",
+            "inherits": [
+                "base-x86-release",
+                "win-base"
+            ],
+            "displayName": "Windows x86 Release"
+        },
+        {
+            "name": "win-x64-debug",
+            "inherits": [
+                "base-x64-debug",
+                "win-base"
+            ],
+            "displayName": "Windows x64 Debug"
+        },
+        {
+            "name": "win-x64-release",
+            "inherits": [
+                "base-x64-release",
+                "win-base"
+            ],
+            "displayName": "Windows x64 Release"
+        },
+        {
+            "name": "linux-x64-debug",
+            "inherits": [
+                "base-x64-debug",
+                "linux-base"
+            ],
+            "displayName": "Linux x64 Debug"
+        },
+        {
+            "name": "linux-x64-release",
+            "inherits": [
+                "base-x64-release",
+                "linux-base"
+            ],
+            "displayName": "Linux x64 Release"
+        },
+        {
+            "name": "macos-x64-debug",
+            "inherits": [
+                "base-x64-debug",
+                "macos-base"
+            ],
+            "displayName": "Mac x64 Debug"
+        },
+        {
+            "name": "macos-x64-release",
+            "inherits": [
+                "base-x64-release",
+                "macos-base"
+            ],
+            "displayName": "Mac x64 Release"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "win-x64-debug",
+            "displayName": "Windows x64 Debug",
+            "configurePreset": "win-x64-debug"
+        },
+        {
+            "name": "win-x64-release",
+            "displayName": "Windows x64 Release",
+            "configurePreset": "win-x64-release"
+        },
+        {
+            "name": "linux-x64-debug",
+            "displayName": "Linux x64 Debug",
+            "configurePreset": "linux-x64-debug"
+        },
+        {
+            "name": "linux-x64-release",
+            "displayName": "Linux x64 Release",
+            "configurePreset": "linux-x64-release"
+        },
+        {
+            "name": "macos-x64-debug",
+            "displayName": "Mac x64 Debug",
+            "configurePreset": "macos-x64-debug"
+        },
+        {
+            "name": "macos-x64-release",
+            "displayName": "Mac x64 Release",
+            "configurePreset": "macos-x64-release"
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "default",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "default"
+                },
+                {
+                    "type": "build",
+                    "name": "default"
+                },
+                {
+                    "type": "package",
+                    "name": "default"
+                }
+            ]
+        }
+    ]
+}

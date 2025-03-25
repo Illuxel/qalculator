@@ -23,8 +23,6 @@ ToolButton {
     }
 
     background: Rectangle {
-        color: styledButton.hovered ? Qt.lighter((hoverColor === "")
-                                                 ? baseColor
-                                                 : hoverColor, 1.25) : baseColor
+        color: styledButton.hovered ? Qt.lighter((hoverColor === "") ? baseColor : hoverColor, 1.25) : baseColor
     }
 }

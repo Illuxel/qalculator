@@ -52,7 +52,6 @@ ToolButton {
             Layout.alignment: imageItemAlign
             Layout.fillHeight: fillImageHeight
 
-
             Layout.fillWidth: fillImageWidth
         }
         //Item { Layout.fillWidth: fillImageWidth }
@@ -74,10 +73,10 @@ ToolButton {
             Layout.fillHeight: fillTextHeight
         }
         //Item { Layout.fillWidth: fillTextWidth }
-     }
-     background: Rectangle {
-         color: styledButton.hovered ? Qt.lighter(baseColor, 1.18) : baseColor
-         opacity: fluentThikness
-         radius: 5
-     }
+    }
+    background: Rectangle {
+        color: styledButton.hovered ? Qt.lighter(baseColor, 1.18) : baseColor
+        opacity: fluentThikness
+        radius: 5
+    }
 }
