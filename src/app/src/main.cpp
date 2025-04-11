@@ -1,26 +1,33 @@
 #include "Calculator.hpp"
 #include "Converter.hpp"
-#include <QGuiApplication>
-#include <QIcon>
-#include <QQmlApplicationEngine>
+#include "ConverterHandler.hpp"
 
-int main(int argc, char* argv[])
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlEngine>
+
+#include <QIcon>
+
+qint32 main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
-    QGuiApplication::setWindowIcon(QIcon("qrc:/assets/calculator.png"));
 
-    // history is static object
-    QScopedPointer<History>          history(new History());
-    QScopedPointer<ConverterHandler> cnvtHandler(new ConverterHandler());
+    QGuiApplication::setApplicationVersion("1.0.0");
+    QGuiApplication::setApplicationName("Qalculator");
+    QGuiApplication::setApplicationDisplayName("Qalculator");
+    QGuiApplication::setWindowIcon(QIcon(":/icons/icon_calculator.png"));
 
-    qmlRegisterSingletonInstance("Calculator.History", 1, 0, "History", history.get());
-    qmlRegisterSingletonInstance("Calculator.ConverterHandler", 1, 0, "ConverterHandler", cnvtHandler.get());
+    std::unique_ptr<History>          history(std::make_unique<History>());
+    std::unique_ptr<ConverterHandler> cnvtHandler(std::make_unique<ConverterHandler>());
 
-    qmlRegisterType<Standart>("Calculator.Standart", 1, 0, "Standart");
-    qmlRegisterType<Converter>("Calculator.Converter", 1, 0, "Converter");
+    qmlRegisterSingletonInstance("qalculator.History", 1, 0, "History", history.get());
+    qmlRegisterSingletonInstance("qalculator.ConverterHandler", 1, 0, "ConverterHandler", cnvtHandler.get());
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl("qrc:/qml/main.qml"));
+    qmlRegisterType<Standart>("qalculator.Standart", 1, 0, "Standart");
+    qmlRegisterType<Converter>("qalculator.Converter", 1, 0, "Converter");
+
+    QQmlApplicationEngine engine(":/qalculator/app/qml/MainWindow.qml");
+
     if (engine.rootObjects().isEmpty())
         return -1;
     return app.exec();

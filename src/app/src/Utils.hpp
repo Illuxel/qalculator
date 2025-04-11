@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QMetaEnum>
-#include <QObject>
 
 template <typename Enum>
 inline Enum ConvertStringToEnum(QString const& enStr)

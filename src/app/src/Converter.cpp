@@ -1,16 +1,15 @@
 #include "Converter.hpp"
 
-#include "Utils.hpp"
+#include <algorithm>
+
+#include <QJSEngine>
 
 Converter::Converter(QObject* parent)
     : QObject(parent)
-    , m_jsEngine(new QJSEngine())
+    , m_jsEngine(std::make_unique<QJSEngine>())
 {
 }
-Converter::~Converter()
-{
-    delete m_jsEngine;
-}
+Converter::~Converter() {}
 
 Q_INVOKABLE void Converter::processInput(QString const& value)
 {
@@ -62,12 +61,18 @@ QString const& Converter::GetSecondType() const
 
 QStringList Converter::GetConverterList() const
 {
-    return m_DataList.keys();
+    QStringList list;
+    list.reserve(m_DataList.size());
+
+    for (auto const& el : m_DataList)
+        list.emplace_back(el.first);
+
+    return list;
 }
 Q_INVOKABLE void Converter::setScheme(QVariantMap const& scheme)
 {
-    for (auto const& [name, function] : scheme.toStdMap())
-        m_DataList.insert(name, function.toString());
+    for (auto const [name, function] : scheme.toStdMap())
+        m_DataList.emplace(name, function.toString());
 
     emit schemeLoaded();
 }

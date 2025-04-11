@@ -1,18 +1,18 @@
 #pragma once
 
-#include "ConverterHandler.hpp"
-#include <QHash>
-#include <QStringListModel>
+#include <QObject>
+
+class QJSEngine;
 
 class Converter : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList typeList READ GetConverterList NOTIFY schemeLoaded)
-    Q_PROPERTY(QString secondType READ GetSecondType WRITE SetSecondType)
-    Q_PROPERTY(QString inputValue READ GetInputValue WRITE SetInputValue NOTIFY inputValueChanged)
+    Q_PROPERTY(QString secondType READ GetSecondType WRITE SetSecondType);
+    Q_PROPERTY(QString inputValue READ GetInputValue WRITE SetInputValue NOTIFY inputValueChanged);
+    Q_PROPERTY(QString convertedValue READ GetConverted NOTIFY lastConvertedChanged);
 
-    Q_PROPERTY(QString convertedValue READ GetConverted NOTIFY lastConvertedChanged)
+    Q_PROPERTY(QStringList typeList READ GetConverterList NOTIFY schemeLoaded);
 
 public:
     enum ButtonType
@@ -20,9 +20,10 @@ public:
         Value = 2,
         Function
     };
-    Q_ENUM(ButtonType)
+    Q_ENUM(ButtonType);
 
-    Converter(QObject* parent = nullptr);
+    Converter(QObject* parent = Q_NULLPTR);
+    ~Converter() override;
 
     Q_INVOKABLE void processInput(QString const& value);
 
@@ -38,8 +39,6 @@ public:
     QStringList      GetConverterList() const;
     Q_INVOKABLE void setScheme(QVariantMap const& scheme);
 
-    ~Converter() override;
-
 private:
     QString ExecuteFunction(QString const& func);
 
@@ -50,13 +49,13 @@ signals:
     void lastConvertedChanged();
 
 private:
-    QJSEngine* m_jsEngine = nullptr;
-    // first - data name
-    // second - data function
-    QMap<QString, QString> m_DataList;
+    std::unique_ptr<QJSEngine> m_jsEngine;
 
     QString m_InputValue;
-
     QString m_SelectedType;
     QString m_LastInputed;
+
+    // first - data name
+    // second - data function
+    std::map<QString, QString> m_DataList;
 };

@@ -3,17 +3,16 @@
 #include "OperationHistory.hpp"
 #include "Utils.hpp"
 
+#include <QJSEngine>
+
 Standart::Standart(QObject* parent)
     : QObject{ parent }
-    , m_jsEngine(new QJSEngine(this))
+    , m_jsEngine(std::make_unique<QJSEngine>())
 {
     m_UnsavedValue  = '0';
     m_LastOperation = Value;
 }
-Standart::~Standart()
-{
-    delete m_jsEngine;
-}
+Standart::~Standart() {}
 
 void Standart::processButton(QString const& type, QString const& func, QString const& placeHolder)
 {
@@ -68,26 +67,24 @@ void Standart::getEqual()
     m_FinalValue = CalculateProduct();
     emit finalValueChanged();
 
-    OperationElement* el = new OperationElement();
-
-    el->SetFinalValue(m_FinalValue);
-
-    el->SetUnsavedValue(m_UnsavedValue);
-    m_UnsavedValue.clear();
-
     m_LastJoined = m_BackEndExpression;
-    el->SetLastJoined(m_LastJoined);
-    emit lastOperationChanged();
 
-    el->SetBackEndExpression(m_BackEndExpression);
-    el->SetOperationType(m_LastOperation);
+    OperationElement* el  = new OperationElement();
+    el->FinalValue        = m_FinalValue;
+    el->UnsavedValue      = m_UnsavedValue;
+    el->LastJoined        = m_LastJoined;
+    el->BackEndExpression = m_BackEndExpression;
+    el->LastOperation     = m_LastOperation;
 
     m_History->pushElement(el);
+
+    m_UnsavedValue.clear();
+    emit lastOperationChanged();
 }
 
 void Standart::ExecuteCommand(QString const& cmd)
 {
-    Command c = ConvertStringToEnum<Command>(cmd);
+    Command const c = ConvertStringToEnum<Command>(cmd);
 
     switch (c)
     {
@@ -204,9 +201,6 @@ void Standart::AddOperator(QChar const& op)
 }
 void Standart::AddFunction(QString const& func, QString const& placeHolder)  // Math.pow(%1, 2)
 {
-    /*if (m_LastOperation == Undefined)
-            return;*/
-
     if (m_LastOperation == Function)
     {
         m_BackEndExpression = func.arg(m_FinalValue);
@@ -216,13 +210,12 @@ void Standart::AddFunction(QString const& func, QString const& placeHolder)  // 
 
         m_LastOperation = Function;
 
-        OperationElement* el = new OperationElement();
-
-        el->SetFinalValue(m_FinalValue);
-        el->SetUnsavedValue(m_UnsavedValue);
-        el->SetLastJoined(m_LastJoined);
-        el->SetBackEndExpression(m_BackEndExpression);
-        el->SetOperationType(m_LastOperation);
+        OperationElement* el  = new OperationElement();
+        el->FinalValue        = m_FinalValue;
+        el->UnsavedValue      = m_UnsavedValue;
+        el->LastJoined        = m_LastJoined;
+        el->BackEndExpression = m_BackEndExpression;
+        el->LastOperation     = m_LastOperation;
 
         m_History->pushElement(el);
 
@@ -255,13 +248,12 @@ void Standart::AddFunction(QString const& func, QString const& placeHolder)  // 
     m_LastJoined    = ConcatPHFunctionWithValue(placeHolder, m_UnsavedValue.toDouble());
     m_LastOperation = Function;
 
-    OperationElement* el = new OperationElement();
-
-    el->SetFinalValue(m_FinalValue);
-    el->SetUnsavedValue(m_UnsavedValue);
-    el->SetLastJoined(m_LastJoined);
-    el->SetBackEndExpression(m_BackEndExpression);
-    el->SetOperationType(m_LastOperation);
+    OperationElement* el  = new OperationElement();
+    el->FinalValue        = m_FinalValue;
+    el->UnsavedValue      = m_UnsavedValue;
+    el->LastJoined        = m_LastJoined;
+    el->BackEndExpression = m_BackEndExpression;
+    el->LastOperation     = m_LastOperation;
 
     m_History->pushElement(el);
 
@@ -298,8 +290,8 @@ void Standart::ClearCalculations()
 
     m_LastJoined.clear();
     m_LastOperation = Value;
-    emit lastOperationChanged();
 
+    emit lastOperationChanged();
     emit enteredValueChanged();
 }
 
@@ -307,11 +299,10 @@ void Standart::onHistoryItemClicked(HistoryElement* item)
 {
     OperationElement* el = static_cast<OperationElement*>(item);
 
-    m_FinalValue = el->GetFinalValue();
-    m_LastJoined = el->GetLastJoined();
-
-    m_LastOperation     = el->GetOperationType();
-    m_BackEndExpression = el->GetBackEndExpression();
+    m_FinalValue        = el->FinalValue;
+    m_LastJoined        = el->LastJoined;
+    m_LastOperation     = el->LastOperation;
+    m_BackEndExpression = el->BackEndExpression;
 
     emit lastOperationChanged();
     emit finalValueChanged();
@@ -352,49 +343,4 @@ QString const& Standart::GetLastOperation() const
 QString OperationElement::placeHolderText() const
 {
     return LastJoined + '=' + FinalValue;
-}
-
-QString const& OperationElement::GetFinalValue() const
-{
-    return FinalValue;
-}
-void OperationElement::SetFinalValue(QString val)
-{
-    FinalValue = val;
-}
-
-QString const& OperationElement::GetUnsavedValue() const
-{
-    return UnsavedValue;
-}
-void OperationElement::SetUnsavedValue(QString val)
-{
-    UnsavedValue = val;
-}
-
-QString const& OperationElement::GetLastJoined() const
-{
-    return LastJoined;
-}
-void OperationElement::SetLastJoined(QString val)
-{
-    LastJoined = val;
-}
-
-QString const& OperationElement::GetBackEndExpression() const
-{
-    return BackEndExpression;
-}
-void OperationElement::SetBackEndExpression(QString val)
-{
-    BackEndExpression = val;
-}
-
-Standart::WaitOperation OperationElement::GetOperationType() const
-{
-    return LastOperation;
-}
-void OperationElement::SetOperationType(Standart::WaitOperation val)
-{
-    LastOperation = val;
 }

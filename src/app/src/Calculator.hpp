@@ -1,10 +1,8 @@
 #pragma once
 
 #include "OperationHistory.hpp"
-#include <QJSEngine>
-#include <QMetaEnum>
-#include <QStringListModel>
 
+class QJSEngine;
 
 class Standart : public QObject
 {
@@ -28,7 +26,8 @@ public:
         cnvrt,
         equal
     };
-    Q_ENUM(Command)
+    Q_ENUM(Command);
+
     enum WaitOperation
     {
         Cmd = 4,
@@ -36,10 +35,9 @@ public:
         Operator,
         Value
     };
-    Q_ENUM(WaitOperation)
+    Q_ENUM(WaitOperation);
 
-public:
-    Standart(QObject* parent = nullptr);
+    Standart(QObject* parent = Q_NULLPTR);
     ~Standart() override;
 
     Q_INVOKABLE virtual void processButton(QString const& type, QString const& func, QString const& placeHolder);
@@ -53,6 +51,8 @@ public:
     QString const& GetLastOperation() const;
 
 private:
+    void SetLastJoined(QString const& lastJoined);
+
     void ExecuteCommand(QString const& cmd);
 
     QString CalculateProduct();
@@ -78,8 +78,8 @@ signals:
     void lastOperationChanged();
 
 private:
-    QJSEngine* m_jsEngine = nullptr;
-    History*   m_History  = nullptr;
+    std::unique_ptr<QJSEngine> m_jsEngine;
+    History*                   m_History = nullptr;
 
     QString m_BackEndExpression, m_FrontEndExpression;
 
@@ -87,27 +87,14 @@ private:
     WaitOperation m_LastOperation;
 };
 
-class OperationElement : public HistoryElement
+struct OperationElement : public HistoryElement
 {
-public:
-    QString placeHolderText() const override;
+    QString FinalValue;
+    QString UnsavedValue;
+    QString LastJoined;
+    QString BackEndExpression;
 
-    QString const& GetFinalValue() const;
-    void           SetFinalValue(QString val);
-
-    QString const& GetUnsavedValue() const;
-    void           SetUnsavedValue(QString val);
-
-    QString const& GetLastJoined() const;
-    void           SetLastJoined(QString val);
-
-    QString const& GetBackEndExpression() const;
-    void           SetBackEndExpression(QString val);
-
-    Standart::WaitOperation GetOperationType() const;
-    void                    SetOperationType(Standart::WaitOperation val);
-
-private:
-    QString                 FinalValue, UnsavedValue, LastJoined, BackEndExpression;
     Standart::WaitOperation LastOperation;
+
+    QString placeHolderText() const override;
 };

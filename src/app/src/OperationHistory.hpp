@@ -1,14 +1,12 @@
 #pragma once
 
 #include <QObject>
-#include <QStringListModel>
 
 class HistoryElement
 {
     Q_GADGET
 
 public:
-    HistoryElement()          = default;
     virtual ~HistoryElement() = default;
 
     virtual QString placeHolderText() const = 0;
@@ -18,12 +16,13 @@ class History : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList list READ GetHistoryList NOTIFY historyListChanged)
-    Q_PROPERTY(QString currentItem READ GetCurrentItem WRITE SetCurrentItem NOTIFY currentItemChanged)
-    Q_PROPERTY(History* object READ GetObject)
+    Q_PROPERTY(QStringList list READ GetHistoryList NOTIFY historyListChanged);
+    Q_PROPERTY(QString currentItem READ GetCurrentItem WRITE SetCurrentItem NOTIFY currentItemChanged);
+    Q_PROPERTY(History* object READ GetObject);
 
 public:
-    explicit History(QObject* parent = nullptr);
+    History(QObject* parent = Q_NULLPTR);
+    ~History() override;
 
     Q_INVOKABLE QString placeHolderAt(int index);
     Q_INVOKABLE void    clearHistory();
@@ -35,8 +34,6 @@ public:
 
     void SetCurrentItem(QString const& el);
 
-    ~History() override;
-
 public slots:
     Q_INVOKABLE void pushElement(HistoryElement* el);
     Q_INVOKABLE void popElement();
@@ -47,5 +44,5 @@ signals:
 
 private:
     QList<HistoryElement*> m_Elements;
-    HistoryElement*        m_CurrentItem = nullptr;
+    HistoryElement*        m_CurrentItem;
 };

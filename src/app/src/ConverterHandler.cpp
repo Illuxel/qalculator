@@ -1,16 +1,15 @@
 #include "ConverterHandler.hpp"
 
 #include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 ConverterHandler::ConverterHandler(QObject* parent)
     : QObject(parent)
 {
     LoadConverterScheme();
 }
-ConverterHandler::~ConverterHandler()
-{
-    delete m_ConverterScheme;
-}
+ConverterHandler::~ConverterHandler() {}
 
 bool ConverterHandler::LoadConverterScheme()
 {
@@ -18,29 +17,23 @@ bool ConverterHandler::LoadConverterScheme()
     if (!file.open(QFile::ReadOnly))
         return false;
 
-    QByteArray    arr = file.readAll();
-    QJsonDocument doc = QJsonDocument::fromJson(arr);
+    m_ConverterScheme  = QJsonDocument::fromJson(file.readAll());
+    m_CurrentConverter = "Angle";
 
-    m_ConverterScheme = new QJsonObject(doc.object());
-
-    return true;
+    return !m_ConverterScheme.isNull();
 }
 
-void ConverterHandler::SetConverter(QString const& converter)
+void ConverterHandler::SetActiveConverter(QString const& converter)
 {
-    m_CurrentConverter = "";
-
-    for (auto const& data : m_ConverterScheme->keys())
-        if (data == converter)
-            m_CurrentConverter = converter;
+    m_CurrentConverter = converter;
 }
 
-QString const& ConverterHandler::GetCurrentConverter() const
+QString const& ConverterHandler::GetActiveConverter() const
 {
     return m_CurrentConverter;
 }
 
 Q_INVOKABLE QVariantMap ConverterHandler::getScheme() const
 {
-    return m_ConverterScheme->value(m_CurrentConverter).toObject().toVariantMap();
+    return m_ConverterScheme.object()[m_CurrentConverter].toObject().toVariantMap();
 }
