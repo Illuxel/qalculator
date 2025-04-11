@@ -1,12 +1,10 @@
 ﻿import QtQuick
 import QtQuick.Controls
 
-import "../components" as Calculator
-
 ComboBox {
     id: comboBox
 
-    delegate: Calculator.StyledComboItem {
+    delegate: StyledComboItem {
         width: comboBox.width
         fontColor: "white"
         highlighted: comboBox.highlightedIndex === index
