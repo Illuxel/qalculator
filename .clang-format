@@ -85,7 +85,7 @@ EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
 FixNamespaceComments: true
 SortIncludes: CaseSensitive
-IncludeBlocks: Regroup
+IncludeBlocks: Preserve
 IncludeCategories:
   # standart libs
   - Regex: '\<.*\>'
