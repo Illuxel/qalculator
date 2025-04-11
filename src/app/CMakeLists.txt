@@ -1,52 +1,52 @@
 
 set( ASSETS
-    assets/menu.ico
-    assets/subtract.ico
-    assets/close.ico
-    assets/settings.png
-    assets/history.png
-    assets/angle.png
-    assets/calculator.png
-    assets/data.png
+    assets/icons/icon_menu.png
+    assets/icons/icon_subtract.png
+    assets/icons/icon_close.png
+    assets/icons/icon_settings.png
+    assets/icons/icon_history.png
+    assets/icons/icon_angle.png
+    assets/icons/icon_calculator.png
+    assets/icons/icon_data.png
 )
 
-set( QML_SOURCE
-    qml/main.qml
-    qml/pages/Standart.qml
-    qml/pages/Converter.qml
-    qml/components/StyledDrawerButton.qml
-    qml/components/StyledToolButton.qml
-    qml/components/StyledWindowButtons.qml
-    qml/components/StyledTextInput.qml
-    qml/components/StyledComboItem.qml
-    qml/components/StyledComboBox.qml
-    qml/components/StyledDialog.qml
+set( QML_SOURCES
+    qml/page/Converter.qml
+    qml/page/Standart.qml
+    qml/MainWindow.qml
 )
 
-set( SOURCE
-    src/main.cpp
+set( INCLUDES
     src/Utils.hpp
-    src/OperationHistory.cpp
     src/OperationHistory.hpp
-    src/Calculator.cpp
     src/Calculator.hpp
-    src/Converter.cpp
     src/Converter.hpp
-    src/ConverterHandler.cpp
     src/ConverterHandler.hpp
 )
 
-qt_add_executable( qalculator ${SOURCE} )
+set( SOURCES
 
-qt_add_resources( qalculator "assets"
-    BASE "assets"
-    PREFIX "/assets"
+    ${INCLUDES}
+
+    src/main.cpp
+    src/OperationHistory.cpp
+    src/Calculator.cpp
+    src/Converter.cpp
+    src/ConverterHandler.cpp
+)
+
+qt_add_executable( Qalculator.App )
+
+qt_add_resources( Qalculator.App "app_assets"
+    BASE "assets/icons"
+    PREFIX "/icons"
     FILES ${ASSETS}
 )
-qt_add_resources( qalculator "qml"
-    BASE "qml"
-    PREFIX "/qml"
-    FILES ${QML_SOURCE}
+qt_add_qml_module( Qalculator.App
+    URI "qalculator.app"
+    RESOURCE_PREFIX "/"
+    SOURCES ${SOURCES}
+    QML_FILES ${QML_SOURCES}
 )
 
-target_link_libraries( qalculator PRIVATE Qt6::Gui Qt6::Quick )
+target_link_libraries( Qalculator.App PRIVATE Qt6::Gui Qt6::Quick Qalculator.Style )
