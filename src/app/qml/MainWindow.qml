@@ -1,19 +1,18 @@
 import QtQuick
-import QtQuick.Shapes
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 
-import "components" as Calculator
+import qalculator.style
 
-import Calculator.History
-import Calculator.Converter
+import qalculator.History
+import qalculator.Converter
 
 ApplicationWindow {
     id: window
     visible: true
 
-    title: "Calculator QML"
+    title: "Qalculator"
 
     width: 335
     height: 505
@@ -68,7 +67,7 @@ ApplicationWindow {
                 spacing: 0
                 Image {
                     id: appIco
-                    source: "qrc:/assets/calculator.png"
+                    source: "qrc:/icons/icon_calculator.png"
                     sourceSize.width: 20
                     sourceSize.height: 20
                     Layout.leftMargin: 5
@@ -85,14 +84,14 @@ ApplicationWindow {
                     Layout.fillWidth: true
                 }
 
-                Calculator.StyledWindowButtons {
-                    iconSource: "qrc:/assets/subtract.ico"
+                StyledWindowButtons {
+                    iconSource: "qrc:/icons/icon_subtract.png"
                     hoverColor: hovered ? Qt.lighter("#1f1f27", 1.1) : "#1f1f27"
                     Layout.minimumWidth: 42
                     onClicked: window.showMinimized()
                 }
-                Calculator.StyledWindowButtons {
-                    iconSource: "qrc:/assets/close.ico"
+                StyledWindowButtons {
+                    iconSource: "qrc:/icons/icon_close.png"
                     hoverColor: hovered ? "red" : "#1f1f27"
                     Layout.minimumWidth: 42
                     onClicked: window.close()
@@ -116,13 +115,14 @@ ApplicationWindow {
                 anchors.fill: parent
                 spacing: 0
                 // drawer button
-                Calculator.StyledDrawerButton {
+                StyledDrawerButton {
                     id: drawerButton
+
+                    iconSource: "qrc:/icons/icon_menu.png"
 
                     Layout.leftMargin: 6
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 
-                    iconSource: "qrc:/assets/menu.ico"
                     onClicked: {
                         if (drawerMainList.opened)
                             drawerMainList.close();
@@ -149,13 +149,13 @@ ApplicationWindow {
                 }
 
                 // History
-                Calculator.StyledDrawerButton {
+                StyledDrawerButton {
                     id: historyButton
 
                     Layout.rightMargin: 6
                     Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
 
-                    iconSource: "qrc:/assets/history.png"
+                    iconSource: "qrc:/icons/icon_history.png"
                     onClicked: {
                         historyListView.model = History.list;
                         drawerHistory.open();
@@ -172,7 +172,7 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.margins: bw
             clip: true
-            initialItem: "qrc:/qml/pages/Standart.qml"
+            initialItem: "qrc:/qalculator/app/qml/page/Standart.qml"
         }
 
         Drawer {
@@ -235,24 +235,24 @@ ApplicationWindow {
                     model: ListModel {
                         ListElement {
                             name: "Standart"
-                            icosource: "qrc:/assets/calculator.png"
-                            page: "qrc:/qml/pages/Standart.qml"
+                            icosource: "qrc:/icons/icon_calculator.png"
+                            page: "qrc:/qalculator/app/qml/page/Standart.qml"
                             section: "Calculator"
                         }
                         ListElement {
                             name: "Angle"
-                            icosource: "qrc:/assets/angle.png"
-                            page: "qrc:/qml/pages/Converter.qml"
+                            icosource: "qrc:/icons/icon_angle.png"
+                            page: "qrc:/qalculator/app/qml/page/Converter.qml"
                             section: "Converter"
                         }
                         ListElement {
                             name: "Data"
-                            icosource: "qrc:/assets/data.png"
-                            page: "qrc:/qml/Converter.qml"
+                            icosource: "qrc:/icons/icon_data.png"
+                            page: "qrc:/qalculator/app/qml/page/Converter.qml"
                             section: "Converter"
                         }
                     }
-                    delegate: Calculator.StyledToolButton {
+                    delegate: StyledToolButton {
                         iconSource: icosource
                         iconH: 28
                         iconW: 28
@@ -289,10 +289,10 @@ ApplicationWindow {
                     section.delegate: sectionHeading
                 }
 
-                Calculator.StyledToolButton {
+                StyledToolButton {
                     id: settingsButton
 
-                    iconSource: "qrc:/assets/settings.png"
+                    iconSource: "qrc:/icons/icon_settings.png"
 
                     textButton: "Settings"
                     textBold: false
@@ -335,7 +335,7 @@ ApplicationWindow {
                 height: parent.height - windowToolBar.height
                 clip: true
                 spacing: 5
-                delegate: Calculator.StyledToolButton {
+                delegate: StyledToolButton {
                     width: parent.width
                     height: 48
                     textButton: modelData
@@ -352,7 +352,7 @@ ApplicationWindow {
         }
     }
 
-    Calculator.StyledDialog {
+    StyledDialog {
         id: settingsDialog
     }
 }

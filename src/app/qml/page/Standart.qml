@@ -1,11 +1,11 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import "../components" as Calculator
+import qalculator.style
 
-import Calculator.History 1.0
-import Calculator.Standart 1.0
+import qalculator.History
+import qalculator.Standart
 
 Page {
     id: page
@@ -255,7 +255,7 @@ Page {
                         color: "#afadcc"
                     }
                 }
-                delegate: Calculator.StyledToolButton {
+                delegate: StyledToolButton {
                     height: 46
                     width: 72
                     iconH: 0
@@ -263,7 +263,7 @@ Page {
                     fluentThikness: 0.89
                     textButton: ph
                     textItemAlign: Qt.AlignHCenter
-                    baseColor: (color === "") ? Calculator.StyledToolButton.baseColor : color
+                    baseColor: (color === "") ? StyledToolButton.baseColor : color
 
                     onClicked: calcStandart.processButton(type, func, ph)
                 }

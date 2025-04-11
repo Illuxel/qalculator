@@ -1,12 +1,12 @@
-﻿import QtQuick
-import QtQml.Models
-import QtQuick.Layouts
+﻿import QtQml.Models
+import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
-import "../components" as Calculator
+import qalculator.style
 
-import Calculator.Converter 1.0
-import Calculator.ConverterHandler 1.0
+import qalculator.Converter
+import qalculator.ConverterHandler
 
 Page {
     id: page
@@ -19,22 +19,20 @@ Page {
         id: converter
 
         onInputValueChanged: firstTypeInput.inputText = converter.inputValue
-
         onLastConvertedChanged: secondTypeInput.inputText = converter.convertedValue
+        onSchemeLoaded: secondTypeBox.model = converter.typeList
 
-        onSchemeLoaded: {
-            secondTypeBox.model = converter.typeList;
-        }
         Component.onCompleted: {
             converter.setScheme(ConverterHandler.getScheme());
             converter.secondType = secondTypeBox.textAt(0);
         }
     }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 1
         //
-        Calculator.StyledTextInput {
+        StyledTextInput {
             id: firstTypeInput
             Layout.fillWidth: true
             Layout.minimumHeight: 32
@@ -53,7 +51,7 @@ Page {
             Layout.rightMargin: 10
         }
         //
-        Calculator.StyledTextInput {
+        StyledTextInput {
             id: secondTypeInput
             Layout.fillWidth: true
             Layout.minimumHeight: 32
@@ -61,7 +59,7 @@ Page {
             textSize: 32
             allowInput: true
         }
-        Calculator.StyledComboBox {
+        StyledComboBox {
             id: secondTypeBox
             Layout.minimumWidth: 100
             Layout.minimumHeight: 35
@@ -173,7 +171,7 @@ Page {
                         color: "#31313d"
                     }
                 }
-                delegate: Calculator.StyledToolButton {
+                delegate: StyledToolButton {
                     height: 40
                     width: 96
                     iconH: 0
@@ -186,7 +184,7 @@ Page {
                     enabled: (ph == "") ? false : true
                     visible: (ph == "") ? false : true
 
-                    baseColor: (color === "") ? Calculator.StyledToolButton.baseColor : color
+                    baseColor: (color === "") ? StyledToolButton.baseColor : color
 
                     onClicked: {
                         if (type === "cmd") {
