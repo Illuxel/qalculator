@@ -5,27 +5,24 @@ import QtQuick.Layouts
 import qalculator.style
 
 import qalculator.History
-import qalculator.Standart
+import qalculator.Calculator
 
-Page {
+Item {
     id: page
 
-    Standart {
-        id: calcStandart
+    Calculator {
+        id: calculator
 
-        onEnteredValueChanged: finalTextInput.text = calcStandart.enteredValue
-        onFinalValueChanged: finalTextInput.text = calcStandart.finalValue
-        onLastOperationChanged: lastTextInput.text = calcStandart.lastOperation
+        onEnteredValueChanged: finalTextInput.text = calculator.enteredValue
+        onFinalValueChanged: finalTextInput.text = calculator.finalValue
+        onLastOperationChanged: lastTextInput.text = calculator.lastOperation
 
         Component.onCompleted: {
-            calcStandart.setHistory(History.object);
-            calcStandart.update();
+            calculator.setHistory(History.object);
+            calculator.update();
         }
     }
 
-    background: Rectangle {
-        color: "transparent"
-    }
     ColumnLayout {
         anchors.fill: parent
         spacing: 6
@@ -76,7 +73,7 @@ Page {
                     regularExpression: /^[0-9]*$/
                 }
 
-                onAccepted: calcStandart.getEqual()
+                onAccepted: calculator.getEqual()
 
                 onTextEdited: {
                     let temp = text;
@@ -85,7 +82,7 @@ Page {
                         finalTextInput.clear();
 
                     finalTextInput.text = temp;
-                    calcStandart.enteredValue = temp;
+                    calculator.enteredValue = temp;
                 }
                 onEditingFinished: {
                     if (finalTextInput.length == 0)
@@ -255,6 +252,7 @@ Page {
                         color: "#afadcc"
                     }
                 }
+
                 delegate: StyledToolButton {
                     height: 46
                     width: 72
@@ -265,7 +263,7 @@ Page {
                     textItemAlign: Qt.AlignHCenter
                     baseColor: (color === "") ? StyledToolButton.baseColor : color
 
-                    onClicked: calcStandart.processButton(type, func, ph)
+                    onClicked: calculator.processButton(type, func, ph)
                 }
             }
         }
