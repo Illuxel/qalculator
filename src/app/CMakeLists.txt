@@ -12,7 +12,7 @@ set( ASSETS
 
 set( QML_SOURCES
     qml/page/Converter.qml
-    qml/page/Standart.qml
+    qml/page/Calculator.qml
     qml/MainWindow.qml
 )
 
