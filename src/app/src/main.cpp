@@ -23,7 +23,7 @@ qint32 main(int argc, char* argv[])
     qmlRegisterSingletonInstance("qalculator.History", 1, 0, "History", history.get());
     qmlRegisterSingletonInstance("qalculator.ConverterHandler", 1, 0, "ConverterHandler", cnvtHandler.get());
 
-    qmlRegisterType<Standart>("qalculator.Standart", 1, 0, "Standart");
+    qmlRegisterType<Standart>("qalculator.Calculator", 1, 0, "Calculator");
     qmlRegisterType<Converter>("qalculator.Converter", 1, 0, "Converter");
 
     QQmlApplicationEngine engine(":/qalculator/app/qml/MainWindow.qml");
