@@ -35,7 +35,16 @@ set( SOURCES
     src/ConverterHandler.cpp
 )
 
-qt_add_executable( Qalculator.App )
+qt_add_executable( Qalculator.App MANUAL_FINALIZATION ${SOURCES} )
+
+add_subdirectory( platforms )
+
+qt_finalize_executable( Qalculator.App )
+
+target_include_directories( Qalculator.App
+    PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+)
 
 qt_add_resources( Qalculator.App "app_assets"
     BASE "assets/icons"
@@ -45,7 +54,6 @@ qt_add_resources( Qalculator.App "app_assets"
 qt_add_qml_module( Qalculator.App
     URI "qalculator.app"
     RESOURCE_PREFIX "/"
-    SOURCES ${SOURCES}
     QML_FILES ${QML_SOURCES}
 )
 
