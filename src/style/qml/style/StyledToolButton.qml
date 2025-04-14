@@ -40,9 +40,14 @@ ToolButton {
 
     property real fluentThikness: 1.0
 
+    background: Rectangle {
+        color: styledButton.hovered ? Qt.lighter(baseColor, 1.18) : baseColor
+        opacity: fluentThikness
+        radius: 5
+    }
+
     contentItem: RowLayout {
         spacing: contentSpacing
-        //Item { Layout.fillWidth: fillImageWidth }
         Image {
             smooth: false
             source: iconSource
@@ -54,9 +59,6 @@ ToolButton {
 
             Layout.fillWidth: fillImageWidth
         }
-        //Item { Layout.fillWidth: fillImageWidth }
-
-        //Item { Layout.fillWidth: fillTextWidth }
         Text {
             text: textButton
             color: textColor
@@ -72,11 +74,5 @@ ToolButton {
             Layout.alignment: textItemAlign
             Layout.fillHeight: fillTextHeight
         }
-        //Item { Layout.fillWidth: fillTextWidth }
-    }
-    background: Rectangle {
-        color: styledButton.hovered ? Qt.lighter(baseColor, 1.18) : baseColor
-        opacity: fluentThikness
-        radius: 5
     }
 }

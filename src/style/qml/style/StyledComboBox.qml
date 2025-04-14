@@ -4,6 +4,13 @@ import QtQuick.Controls
 ComboBox {
     id: comboBox
 
+    background: Rectangle {
+        radius: 5
+        color: comboBox.hovered ? Qt.lighter("#2e2e2e", 1.18) : "#2e2e2e"
+        border.color: comboBox.pressed ? "white" : "tranparent"
+        border.width: comboBox.visualFocus ? 2 : 1
+    }
+
     delegate: StyledComboItem {
         width: comboBox.width
         fontColor: "white"
@@ -44,18 +51,16 @@ ComboBox {
         elide: Text.ElideRight
     }
 
-    background: Rectangle {
-        radius: 5
-        color: comboBox.hovered ? Qt.lighter("#2e2e2e", 1.18) : "#2e2e2e"
-        border.color: comboBox.pressed ? "white" : "tranparent"
-        border.width: comboBox.visualFocus ? 2 : 1
-    }
-
     popup: Popup {
         y: comboBox.height - 2
         implicitWidth: comboBox.width
         implicitHeight: contentItem.implicitHeight
         padding: 1
+
+        background: Rectangle {
+            color: Qt.lighter("#1f1f27", 1.18)
+            radius: 5
+        }
 
         contentItem: ListView {
             clip: true
@@ -66,11 +71,6 @@ ComboBox {
             currentIndex: comboBox.highlightedIndex
 
             ScrollIndicator.vertical: ScrollIndicator {}
-        }
-
-        background: Rectangle {
-            color: Qt.lighter("#1f1f27", 1.18)
-            radius: 5
         }
     }
 }
