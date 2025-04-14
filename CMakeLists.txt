@@ -5,7 +5,7 @@ set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 project( qalculator LANGUAGES CXX )
 
-find_package( Qt6 REQUIRED COMPONENTS Widgets Gui Quick Qml )
+find_package( Qt6 COMPONENTS Quick Qml REQUIRED )
 qt_standard_project_setup( REQUIRES 6.5 I18N_SOURCE_LANGUAGE en )
 
 add_subdirectory( src/app )

@@ -1,18 +1,11 @@
-#include "OperationHistory.hpp"
+#include "History.hpp"
 
-#include <QList>
 #include <QQmlApplicationEngine>
 
 History::History(QObject* parent)
     : QObject(parent)
 {
 }
-
-History* History::GetObject()
-{
-    return this;
-}
-
 History::~History()
 {
     for (auto& el : m_Elements)
@@ -41,13 +34,13 @@ QString History::placeHolderAt(int index)
     return m_Elements.at(index)->placeHolderText();
 }
 
-QString History::GetCurrentItem()
+QString History::getCurrentItem()
 {
     if (m_CurrentItem)
         m_CurrentItem->placeHolderText();
     return "";
 }
-void History::SetCurrentItem(QString const& setEl)
+void History::setCurrentItem(QString const& setEl)
 {
     for (auto el : m_Elements)
         if (el->placeHolderText() == setEl)
@@ -56,7 +49,7 @@ void History::SetCurrentItem(QString const& setEl)
     emit currentItemChanged(m_CurrentItem);
 }
 
-QStringList History::GetHistoryList() const
+QStringList History::getHistoryList() const
 {
     QStringList m_HistoryList;
     for (auto el : m_Elements)

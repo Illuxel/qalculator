@@ -17,49 +17,49 @@ Q_INVOKABLE void Converter::processInput(QString const& value)
         return;
 
     QString func       = m_DataList[m_SelectedType].arg(value);
-    QString finalValue = ExecuteFunction(func);
+    QString finalValue = executeFunction(func);
 
-    SetConverted(finalValue);
+    setConverted(finalValue);
 }
 
-QString const& Converter::GetInputValue() const
+QString const& Converter::getInputValue() const
 {
     return m_InputValue;
 }
-void Converter::SetInputValue(QString const& val)
+void Converter::setInputValue(QString const& val)
 {
     m_InputValue = val;
     emit inputValueChanged();
 }
 
-QString Converter::GetConverted() const
+QString Converter::getConverted() const
 {
     return m_LastInputed;
 }
-void Converter::SetConverted(QString const& val)
+void Converter::setConverted(QString const& val)
 {
     m_LastInputed = val;
     emit lastConvertedChanged();
 }
 
-QString Converter::ExecuteFunction(QString const& func)
+QString Converter::executeFunction(QString const& func)
 {
     QJSValue val = m_jsEngine->evaluate(func);
     return val.toString();
 }
 
-void Converter::SetSecondType(QString const& second)
+void Converter::setSecondType(QString const& second)
 {
     m_SelectedType = second;
 
     processInput(m_LastInputed);
 }
-QString const& Converter::GetSecondType() const
+QString const& Converter::getSecondType() const
 {
     return m_SelectedType;
 }
 
-QStringList Converter::GetConverterList() const
+QStringList Converter::getConverterList() const
 {
     QStringList list;
     list.reserve(m_DataList.size());

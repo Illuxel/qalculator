@@ -1,5 +1,6 @@
 
 set( ASSETS
+
     assets/icons/icon_menu.png
     assets/icons/icon_subtract.png
     assets/icons/icon_close.png
@@ -11,17 +12,19 @@ set( ASSETS
 )
 
 set( QML_SOURCES
+
+    qml/MainWindow.qml
     qml/page/Converter.qml
     qml/page/Calculator.qml
-    qml/MainWindow.qml
 )
 
 set( INCLUDES
-    src/Utils.hpp
-    src/OperationHistory.hpp
-    src/Calculator.hpp
-    src/Converter.hpp
-    src/ConverterHandler.hpp
+
+    include/Utils.hpp
+    include/History.hpp
+    include/Calculator.hpp
+    include/Converter.hpp
+    include/ConverterHandler.hpp
 )
 
 set( SOURCES
@@ -29,7 +32,7 @@ set( SOURCES
     ${INCLUDES}
 
     src/main.cpp
-    src/OperationHistory.cpp
+    src/History.cpp
     src/Calculator.cpp
     src/Converter.cpp
     src/ConverterHandler.cpp
@@ -37,7 +40,7 @@ set( SOURCES
 
 qt_add_executable( Qalculator.App MANUAL_FINALIZATION ${SOURCES} )
 
-add_subdirectory( platforms )
+add_subdirectory( platform )
 
 qt_finalize_executable( Qalculator.App )
 
@@ -57,4 +60,4 @@ qt_add_qml_module( Qalculator.App
     QML_FILES ${QML_SOURCES}
 )
 
-target_link_libraries( Qalculator.App PRIVATE Qt6::Gui Qt6::Quick Qalculator.Style )
+target_link_libraries( Qalculator.App PRIVATE Qt6::Qml Qt6::Quick Qalculator.Style )

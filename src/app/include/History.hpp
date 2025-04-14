@@ -15,10 +15,8 @@ public:
 class History : public QObject
 {
     Q_OBJECT
-
-    Q_PROPERTY(QStringList list READ GetHistoryList NOTIFY historyListChanged);
-    Q_PROPERTY(QString currentItem READ GetCurrentItem WRITE SetCurrentItem NOTIFY currentItemChanged);
-    Q_PROPERTY(History* object READ GetObject);
+    Q_PROPERTY(QStringList list READ getHistoryList NOTIFY historyListChanged);
+    Q_PROPERTY(QString currentItem READ getCurrentItem WRITE setCurrentItem NOTIFY currentItemChanged);
 
 public:
     History(QObject* parent = Q_NULLPTR);
@@ -27,12 +25,10 @@ public:
     Q_INVOKABLE QString placeHolderAt(int index);
     Q_INVOKABLE void    clearHistory();
 
-    History* GetObject();
+    QStringList getHistoryList() const;
+    QString     getCurrentItem();
 
-    QStringList GetHistoryList() const;
-    QString     GetCurrentItem();
-
-    void SetCurrentItem(QString const& el);
+    void setCurrentItem(QString const& el);
 
 public slots:
     Q_INVOKABLE void pushElement(HistoryElement* el);

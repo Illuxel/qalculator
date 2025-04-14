@@ -7,11 +7,11 @@
 ConverterHandler::ConverterHandler(QObject* parent)
     : QObject(parent)
 {
-    LoadConverterScheme();
+    loadConverterScheme();
 }
 ConverterHandler::~ConverterHandler() {}
 
-bool ConverterHandler::LoadConverterScheme()
+bool ConverterHandler::loadConverterScheme()
 {
     QFile file("ConverterData.json");
     if (!file.open(QFile::ReadOnly))
@@ -23,12 +23,12 @@ bool ConverterHandler::LoadConverterScheme()
     return !m_ConverterScheme.isNull();
 }
 
-void ConverterHandler::SetActiveConverter(QString const& converter)
+void ConverterHandler::setActiveConverter(QString const& converter)
 {
     m_CurrentConverter = converter;
 }
 
-QString const& ConverterHandler::GetActiveConverter() const
+QString const& ConverterHandler::getActiveConverter() const
 {
     return m_CurrentConverter;
 }

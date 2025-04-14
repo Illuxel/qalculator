@@ -1,3 +1,5 @@
+#include "History.hpp"
+
 #include "Calculator.hpp"
 #include "Converter.hpp"
 #include "ConverterHandler.hpp"
@@ -12,17 +14,17 @@ qint32 main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
 
-    QGuiApplication::setApplicationVersion("1.0.0");
     QGuiApplication::setApplicationName("Qalculator");
     QGuiApplication::setApplicationDisplayName("Qalculator");
+    QGuiApplication::setApplicationVersion("1.0.0");
+
     QGuiApplication::setWindowIcon(QIcon(":/icons/icon_calculator.png"));
 
-    std::unique_ptr<History>          history(std::make_unique<History>());
     std::unique_ptr<ConverterHandler> cnvtHandler(std::make_unique<ConverterHandler>());
 
-    qmlRegisterSingletonInstance("qalculator.History", 1, 0, "History", history.get());
     qmlRegisterSingletonInstance("qalculator.ConverterHandler", 1, 0, "ConverterHandler", cnvtHandler.get());
 
+    qmlRegisterType<History>("qalculator.History", 1, 0, "History");
     qmlRegisterType<Standart>("qalculator.Calculator", 1, 0, "Calculator");
     qmlRegisterType<Converter>("qalculator.Converter", 1, 0, "Converter");
 

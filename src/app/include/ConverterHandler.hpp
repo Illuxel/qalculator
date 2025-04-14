@@ -7,21 +7,19 @@
 class ConverterHandler : public QObject
 {
     Q_OBJECT
-
-    Q_PROPERTY(QString currentConverter MEMBER m_CurrentConverter READ GetActiveConverter WRITE SetActiveConverter);
-    // Q_PROPERTY(QString  MEMBER  READ  WRITE )
+    Q_PROPERTY(QString currentConverter MEMBER m_CurrentConverter READ getActiveConverter WRITE setActiveConverter);
 
 public:
     ConverterHandler(QObject* parent = Q_NULLPTR);
     ~ConverterHandler() override;
 
-    void           SetActiveConverter(QString const& type);
-    QString const& GetActiveConverter() const;
+    void           setActiveConverter(QString const& type);
+    QString const& getActiveConverter() const;
 
     Q_INVOKABLE QVariantMap getScheme() const;
 
 private:
-    bool LoadConverterScheme();
+    bool loadConverterScheme();
 
 signals:
     void convterterTypeChanged();

@@ -1,9 +1,21 @@
 #include "Calculator.hpp"
 
-#include "OperationHistory.hpp"
+#include "History.hpp"
 #include "Utils.hpp"
 
 #include <QJSEngine>
+
+struct OperationElement : public HistoryElement
+{
+    QString FinalValue;
+    QString UnsavedValue;
+    QString LastJoined;
+    QString BackEndExpression;
+
+    Standart::WaitOperation LastOperation;
+
+    QString placeHolderText() const override;
+};
 
 Standart::Standart(QObject* parent)
     : QObject{ parent }
@@ -22,10 +34,10 @@ void Standart::processButton(QString const& type, QString const& func, QString c
 
     switch (t)
     {
-        case Standart::Cmd:      ExecuteCommand(func); break;
-        case Standart::Function: AddFunction(func, placeHolder); break;
-        case Standart::Operator: AddOperator(*func.begin()); break;
-        case Standart::Value:    AddEnteredValue(*func.begin()); break;
+        case Standart::Cmd:      executeCommand(func); break;
+        case Standart::Function: addFunction(func, placeHolder); break;
+        case Standart::Operator: addOperator(*func.begin()); break;
+        case Standart::Value:    addEnteredValue(*func.begin()); break;
     }
 }
 void Standart::setHistory(History* history)
@@ -64,7 +76,7 @@ void Standart::getEqual()
     if (!m_BackEndExpression.end()->isNumber())
         m_BackEndExpression += m_UnsavedValue;
 
-    m_FinalValue = CalculateProduct();
+    m_FinalValue = calculateProduct();
     emit finalValueChanged();
 
     m_LastJoined = m_BackEndExpression;
@@ -82,15 +94,15 @@ void Standart::getEqual()
     emit lastOperationChanged();
 }
 
-void Standart::ExecuteCommand(QString const& cmd)
+void Standart::executeCommand(QString const& cmd)
 {
     Command const c = ConvertStringToEnum<Command>(cmd);
 
     switch (c)
     {
-        case Standart::del:    DeleteEnteredValue(); break;
-        case Standart::clr:    ClearEntered(); break;
-        case Standart::clrall: ClearCalculations(); break;
+        case Standart::del:    deleteEnteredValue(); break;
+        case Standart::clr:    clearEntered(); break;
+        case Standart::clrall: clearCalculations(); break;
         case Standart::equal:  getEqual(); break;
         case Standart::cnvrt:
             if (m_UnsavedValue[0] == '0')
@@ -126,14 +138,14 @@ void Standart::ExecuteCommand(QString const& cmd)
     m_LastOperation = Cmd;
 }
 
-Q_INVOKABLE void Standart::SetEnteredValue(QString const& value)
+Q_INVOKABLE void Standart::setEnteredValue(QString const& value)
 {
     m_UnsavedValue  = value;
     m_LastOperation = Value;
 
     emit enteredValueChanged();
 }
-void Standart::AddEnteredValue(QChar const& value)
+void Standart::addEnteredValue(QChar const& value)
 {
     if (!m_UnsavedValue.isEmpty())
     {
@@ -167,7 +179,7 @@ void Standart::AddEnteredValue(QChar const& value)
     emit enteredValueChanged();
 }
 
-void Standart::AddOperator(QChar const& op)
+void Standart::addOperator(QChar const& op)
 {
     if (m_LastOperation == Cmd)
     {
@@ -199,13 +211,13 @@ void Standart::AddOperator(QChar const& op)
 
     m_LastOperation = Operator;
 }
-void Standart::AddFunction(QString const& func, QString const& placeHolder)  // Math.pow(%1, 2)
+void Standart::addFunction(QString const& func, QString const& placeHolder)  // Math.pow(%1, 2)
 {
     if (m_LastOperation == Function)
     {
         m_BackEndExpression = func.arg(m_FinalValue);
-        m_LastJoined        = ConcatPHFunctionWithValue(placeHolder, m_FinalValue.toDouble());
-        m_FinalValue        = CalculateProduct();
+        m_LastJoined        = concatPHFunctionWithValue(placeHolder, m_FinalValue.toDouble());
+        m_FinalValue        = calculateProduct();
         m_UnsavedValue      = m_FinalValue;
 
         m_LastOperation = Function;
@@ -243,9 +255,9 @@ void Standart::AddFunction(QString const& func, QString const& placeHolder)  // 
     }
 
     m_BackEndExpression = func.arg(m_UnsavedValue);
-    m_FinalValue        = CalculateProduct();
+    m_FinalValue        = calculateProduct();
 
-    m_LastJoined    = ConcatPHFunctionWithValue(placeHolder, m_UnsavedValue.toDouble());
+    m_LastJoined    = concatPHFunctionWithValue(placeHolder, m_UnsavedValue.toDouble());
     m_LastOperation = Function;
 
     OperationElement* el  = new OperationElement();
@@ -261,7 +273,7 @@ void Standart::AddFunction(QString const& func, QString const& placeHolder)  // 
     emit finalValueChanged();
 }
 
-void Standart::DeleteEnteredValue()
+void Standart::deleteEnteredValue()
 {
     if (m_UnsavedValue.isEmpty())
     {
@@ -277,14 +289,14 @@ void Standart::DeleteEnteredValue()
     emit enteredValueChanged();
 }
 
-void Standart::ClearEntered()
+void Standart::clearEntered()
 {
     m_UnsavedValue = '0';
     emit enteredValueChanged();
 }
-void Standart::ClearCalculations()
+void Standart::clearCalculations()
 {
-    ClearEntered();
+    clearEntered();
     m_FinalValue.clear();
     m_BackEndExpression.clear();
 
@@ -308,7 +320,7 @@ void Standart::onHistoryItemClicked(HistoryElement* item)
     emit finalValueChanged();
 }
 
-QString Standart::ConcatPHFunctionWithValue(QString const& placeHolder, double value) const
+QString Standart::concatPHFunctionWithValue(QString const& placeHolder, double value) const
 {
     QString temp = placeHolder;
 
@@ -325,17 +337,17 @@ QString Standart::ConcatPHFunctionWithValue(QString const& placeHolder, double v
     return temp;
 }
 
-QString Standart::CalculateProduct()
+QString Standart::calculateProduct()
 {
     QJSValue val = m_jsEngine->evaluate(m_BackEndExpression);
     return val.toString();
 }
 
-QString const& Standart::GetFinalValue() const
+QString const& Standart::getFinalValue() const
 {
     return m_FinalValue;
 }
-QString const& Standart::GetLastOperation() const
+QString const& Standart::getLastOperation() const
 {
     return m_LastJoined;
 }
